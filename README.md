@@ -60,5 +60,5 @@ class ViewController: UIViewController {
 
 Carthage setup:
 ```
-github "maxvol/JSONLayout" ~> 0.0.1
+github "maxvol/JSONLayout" ~> 0.0.2
 ```
