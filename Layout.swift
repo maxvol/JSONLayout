@@ -12,24 +12,29 @@ public enum LayoutError: Error {
     case fileNotFound(String)
 }
 
+public protocol LayoutDelegate {
+    func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions
+}
+
 public class Layout {
     private var views: [String: UIView] = [:]
     private var metrics: [String: Float] = [:]
     private var constraints = [NSLayoutConstraint]()
-    //    let options: NSLayoutConstraint.FormatOptions = [.alignAllCenterY]
+    private let delegate: LayoutDelegate?
     private let layout: MarkupLayout
     
-    public init(name: String) throws {
+    public init(name: String, delegate: LayoutDelegate? = nil) throws {
+        self.delegate = delegate
         guard let url = Bundle.main.url(forResource: name, withExtension: "json") else { throw LayoutError.fileNotFound("\(name).json") }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         self.layout = try decoder.decode(MarkupLayout.self, from: data)
     }
     
-    private func addConstraint(visualFormat: String) {
+    private func addConstraint(name: String, visualFormat: String) {
         self.constraints += NSLayoutConstraint.constraints(
             withVisualFormat: visualFormat,
-            options: [],
+            options: self.delegate?.formatOptions(for: name) ?? [],
             metrics: metrics,
             views: views)
     }
@@ -53,11 +58,12 @@ public class Layout {
         root.translatesAutoresizingMaskIntoConstraints = false
         self.add(views: layout.views, to: root)
         self.metrics = layout.metrics
-        for constraint in layout.constraints.values {
-            self.addConstraint(visualFormat: constraint)
+        for (name, constraint) in layout.constraints {
+            self.addConstraint(name: name, visualFormat: constraint)
         }
         NSLayoutConstraint.activate(self.constraints)
         root.layoutSubviews()
     }
     
 }
+
