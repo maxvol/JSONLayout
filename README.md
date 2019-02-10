@@ -39,6 +39,8 @@ How to define layout in JSON:
 ```
 How to use it in code:
 ```swift
+import JSONLayout
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -54,8 +56,9 @@ class ViewController: UIViewController {
 
 }
 ```
+![alt JSONLayout](https://github.com/maxvol/JSONLayout/blob/master/JSONLayout.jpg?raw=true)
 
 Carthage setup:
 ```
-github "maxvol/JSONLayout" ~> 0.0.1
+github "maxvol/JSONLayout" ~> 0.0.2
 ```
