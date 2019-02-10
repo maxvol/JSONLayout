@@ -41,16 +41,16 @@ How to use it in code:
 ```swift
 class ViewController: UIViewController {
 
-override func viewDidLoad() {
-super.viewDidLoad()
-// Do any additional setup after loading the view, typically from a nib.
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
 
-try? Layout(name: "layout").inflate(in: view)        
-view.findViewByID("V1")?.backgroundColor = UIColor.blue
-view.findViewByID("V2")?.backgroundColor = UIColor.yellow
-view.findViewByID("L1")?.backgroundColor = UIColor.green
-view.findViewByID("L2")?.backgroundColor = UIColor.red
-}
+        try? Layout(name: "layout").inflate(in: view)        
+        view.findViewByID("V1")?.backgroundColor = UIColor.blue
+        view.findViewByID("V2")?.backgroundColor = UIColor.yellow
+        view.findViewByID("L1")?.backgroundColor = UIColor.green
+        view.findViewByID("L2")?.backgroundColor = UIColor.red
+    }
 
 }
 ```
