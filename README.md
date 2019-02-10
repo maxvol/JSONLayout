@@ -39,6 +39,8 @@ How to define layout in JSON:
 ```
 How to use it in code:
 ```swift
+import JSONLayout
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
