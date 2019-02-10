@@ -54,6 +54,7 @@ class ViewController: UIViewController {
 
 }
 ```
+![alt JSONLayout](https://github.com/maxvol/JSONLayout/blob/master/JSONLayout.jpeg?raw=true)
 
 Carthage setup:
 ```
