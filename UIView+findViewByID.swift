@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {    
-    func findViewByID(_ id: String) -> UIView? {
+    public func findViewByID(_ id: String) -> UIView? {
         return self.viewWithTag(id.hash)
     }
 }
