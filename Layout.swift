@@ -12,10 +12,10 @@ public enum LayoutError: Error {
     case fileNotFound(String)
 }
 
-@objc public protocol LayoutDelegate {
-    @objc optional func view(of type: String, for id: String) -> UIView?
-    @objc optional func didCreate(_ view: UIView, for id: String)
-    @objc optional func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions
+public protocol LayoutDelegate {
+    func view(of type: String, for id: String) -> UIView?
+    func didCreate(_ view: UIView, for id: String)
+    func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions
 }
 
 extension LayoutDelegate {
@@ -59,7 +59,7 @@ public class Layout {
     private func add(views: [String: MarkupElement], to root: UIView) {
         for (id, view) in views {
             guard let v = self.delegate?.view(of: view.type, for: id) ?? Layout.view(of: view.type) else { continue }
-            self.delegate?.didCreate?(v, for: id)
+            self.delegate?.didCreate(v, for: id)
             v.translatesAutoresizingMaskIntoConstraints = false
             v.tag = id.hash
             self.views[id] = v
