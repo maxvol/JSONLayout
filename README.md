@@ -56,6 +56,9 @@ class ViewController: UIViewController {
 
 }
 ```
+**Gotcha**: if the view class in not a part of `UIKit`, specify its full name including module, i.e. `MyApp.MyView`.
+For further customization of views and constraints, implemend `LayoutDelegate`.
+
 ![alt JSONLayout](https://github.com/maxvol/JSONLayout/blob/master/JSONLayout.jpg?raw=true)
 
 Carthage setup:
