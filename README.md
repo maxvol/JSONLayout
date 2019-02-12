@@ -63,5 +63,5 @@ For further customization of views and constraints, implemend `LayoutDelegate`.
 
 Carthage setup:
 ```
-github "maxvol/JSONLayout" ~> 0.0.2
+github "maxvol/JSONLayout" ~> 0.0.8
 ```
