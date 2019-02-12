@@ -40,7 +40,7 @@ public class Layout {
     private func add(views: [String: MarkupElement], to root: UIView) {
         for (id, view) in views {
             guard let v = self.viewOfType(view.type, id) else { continue }
-            self.didCreate(v, id)
+            self.didCreateView(v, id)
             v.translatesAutoresizingMaskIntoConstraints = false
             v.tag = id.hash
             self.views[id] = v
@@ -75,7 +75,7 @@ public class Layout {
     
     public var formatOptions: FormatOptionsForConstraintID = { (id) -> NSLayoutConstraint.FormatOptions in [] }
     public var viewOfType: ViewOfTypeForID = { (type, id) -> UIView? in return Layout.view(of: type) }
-    public var didCreate: DidCreateViewForID = { (view, id) -> Void in return }
+    public var didCreateView: DidCreateViewForID = { (view, id) -> Void in return }
     
 }
 

@@ -66,7 +66,7 @@ try? Layout(name: "layout").configure {
     // provide view yourself (if the class does not have default initializer) or fall back to the default implementation
     $0.viewOfType = { (type, id) -> UIView? in return Layout.view(of: type) }
     // configure a newly created view
-    $0.didCreate = { (view, id) -> Void in return }
+    $0.didCreateView = { (view, id) -> Void in return }
 }
 .inflate(in: view)
 ```
