@@ -13,6 +13,7 @@ public enum LayoutError: Error {
 }
 
 public protocol LayoutDelegate {
+    func didCreate(_ view: UIView, with id: String)
     func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions
 }
 
@@ -31,10 +32,10 @@ public class Layout {
         self.layout = try decoder.decode(MarkupLayout.self, from: data)
     }
     
-    private func addConstraint(name: String, visualFormat: String) {
+    private func addConstraint(id: String, visualFormat: String) {
         self.constraints += NSLayoutConstraint.constraints(
             withVisualFormat: visualFormat,
-            options: self.delegate?.formatOptions(for: name) ?? [],
+            options: self.delegate?.formatOptions(for: id) ?? [],
             metrics: metrics,
             views: views)
     }
@@ -43,6 +44,7 @@ public class Layout {
         for (id, view) in views {
             guard let cls = NSClassFromString(view.type) as? UIView.Type else { continue }
             let v = cls.init()
+            self.delegate?.didCreate(v, with: id)
             v.translatesAutoresizingMaskIntoConstraints = false
             v.tag = id.hash
             self.views[id] = v
@@ -58,8 +60,8 @@ public class Layout {
         root.translatesAutoresizingMaskIntoConstraints = false
         self.add(views: layout.views, to: root)
         self.metrics = layout.metrics
-        for (name, constraint) in layout.constraints {
-            self.addConstraint(name: name, visualFormat: constraint)
+        for (id, constraint) in layout.constraints {
+            self.addConstraint(id: id, visualFormat: constraint)
         }
         NSLayoutConstraint.activate(self.constraints)
         root.layoutSubviews()
