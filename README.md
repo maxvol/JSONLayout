@@ -75,5 +75,5 @@ try? Layout(name: "layout").configure {
 
 Carthage setup:
 ```
-github "maxvol/JSONLayout" ~> 0.0.8
+github "maxvol/JSONLayout" ~> 0.1.0
 ```
