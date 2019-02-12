@@ -58,7 +58,7 @@ class ViewController: UIViewController {
 
 }
 ```
-For further customization of views and constraints, implemend `LayoutDelegate`.
+For further customization of views and constraints, implement `LayoutDelegate`.
 
 ![alt JSONLayout](https://github.com/maxvol/JSONLayout/blob/master/JSONLayout.jpg?raw=true)
 
