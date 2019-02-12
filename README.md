@@ -58,7 +58,18 @@ class ViewController: UIViewController {
 
 }
 ```
-For further customization of views and constraints, implement `LayoutDelegate`.
+For further customization of views and constraints, implement some or all lambdas in `configure` clause as follows:
+```swift
+try? Layout(name: "layout").configure {
+    // customize format options
+    $0.formatOptions = { (id) -> NSLayoutConstraint.FormatOptions in [] }
+    // provide view yourself (if the class does not have default initializer) or fall back to the default implementation
+    $0.viewOfType = { (type, id) -> UIView? in return Layout.view(of: type) }
+    // configure a newly created view
+    $0.didCreate = { (view, id) -> Void in return }
+}
+.inflate(in: view)
+```
 
 ![alt JSONLayout](https://github.com/maxvol/JSONLayout/blob/master/JSONLayout.jpg?raw=true)
 
