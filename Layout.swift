@@ -12,9 +12,25 @@ public enum LayoutError: Error {
     case fileNotFound(String)
 }
 
-public protocol LayoutDelegate {
-    func didCreate(_ view: UIView, with id: String)
-    func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions
+@objc public protocol LayoutDelegate {
+    @objc optional func view(of type: String, for id: String) -> UIView?
+    @objc optional func didCreate(_ view: UIView, for id: String)
+    @objc optional func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions
+}
+
+extension LayoutDelegate {
+    
+    func view(of type: String, for id: String) -> UIView? {
+        return Layout.view(of: type)
+    }
+    
+    func didCreate(_ view: UIView, with id: String) {
+        return
+    }
+    
+    func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions {
+        return []
+    }
 }
 
 public class Layout {
@@ -42,9 +58,8 @@ public class Layout {
     
     private func add(views: [String: MarkupElement], to root: UIView) {
         for (id, view) in views {
-            guard let cls = NSClassFromString(view.type) as? UIView.Type else { continue }
-            let v = cls.init()
-            self.delegate?.didCreate(v, with: id)
+            guard let v = self.delegate?.view(of: view.type, for: id) ?? Layout.view(of: view.type) else { continue }
+            self.delegate?.didCreate?(v, for: id)
             v.translatesAutoresizingMaskIntoConstraints = false
             v.tag = id.hash
             self.views[id] = v
@@ -67,5 +82,12 @@ public class Layout {
         root.layoutSubviews()
     }
     
+    public static func view(of type: String) -> UIView? {
+        if let cls = NSClassFromString(type) as? UIView.Type {
+            let v = cls.init()
+            return v
+        }
+        return nil
+    }
+    
 }
-
