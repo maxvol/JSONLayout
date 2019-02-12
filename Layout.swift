@@ -12,36 +12,17 @@ public enum LayoutError: Error {
     case fileNotFound(String)
 }
 
-public protocol LayoutDelegate {
-    func view(of type: String, for id: String) -> UIView?
-    func didCreate(_ view: UIView, for id: String)
-    func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions
-}
-
-extension LayoutDelegate {
-    
-    func view(of type: String, for id: String) -> UIView? {
-        return Layout.view(of: type)
-    }
-    
-    func didCreate(_ view: UIView, with id: String) {
-        return
-    }
-    
-    func formatOptions(for constraint: String) -> NSLayoutConstraint.FormatOptions {
-        return []
-    }
-}
+public typealias ViewOfTypeForID = (String, String) -> UIView?
+public typealias DidCreateViewForID = (UIView, String) -> Void
+public typealias FormatOptionsForConstraintID = (String) -> NSLayoutConstraint.FormatOptions
 
 public class Layout {
     private var views: [String: UIView] = [:]
     private var metrics: [String: Float] = [:]
     private var constraints = [NSLayoutConstraint]()
-    private let delegate: LayoutDelegate?
     private let layout: MarkupLayout
     
-    public init(name: String, delegate: LayoutDelegate? = nil) throws {
-        self.delegate = delegate
+    public init(name: String) throws {
         guard let url = Bundle.main.url(forResource: name, withExtension: "json") else { throw LayoutError.fileNotFound("\(name).json") }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
@@ -51,15 +32,15 @@ public class Layout {
     private func addConstraint(id: String, visualFormat: String) {
         self.constraints += NSLayoutConstraint.constraints(
             withVisualFormat: visualFormat,
-            options: self.delegate?.formatOptions(for: id) ?? [],
+            options: self.formatOptions(id),
             metrics: metrics,
             views: views)
     }
     
     private func add(views: [String: MarkupElement], to root: UIView) {
         for (id, view) in views {
-            guard let v = self.delegate?.view(of: view.type, for: id) ?? Layout.view(of: view.type) else { continue }
-            self.delegate?.didCreate(v, for: id)
+            guard let v = self.viewOfType(view.type, id) else { continue }
+            self.didCreate(v, id)
             v.translatesAutoresizingMaskIntoConstraints = false
             v.tag = id.hash
             self.views[id] = v
@@ -90,4 +71,18 @@ public class Layout {
         return nil
     }
     
+    // MARK: - configuration
+    
+    public var formatOptions: FormatOptionsForConstraintID = { (id) -> NSLayoutConstraint.FormatOptions in [] }
+    public var viewOfType: ViewOfTypeForID = { (type, id) -> UIView? in return Layout.view(of: type) }
+    public var didCreate: DidCreateViewForID = { (view, id) -> Void in return }
+    
+}
+
+extension Layout {
+    @discardableResult
+    public func configure(_ closure: (Layout) -> Void) -> Layout {
+        closure(self)
+        return self
+    }
 }
