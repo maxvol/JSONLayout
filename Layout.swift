@@ -10,6 +10,7 @@ import UIKit
 
 public enum LayoutError: Error {
     case fileNotFound(String)
+    case classNotFound(String)
 }
 
 public typealias ViewOfTypeForID = (String, String) -> UIView?
@@ -23,7 +24,9 @@ public class Layout {
     private let layout: MarkupLayout
     
     public init(name: String) throws {
-        guard let url = Bundle.main.url(forResource: name, withExtension: "json") else { throw LayoutError.fileNotFound("\(name).json") }
+        guard let url = Bundle.main.url(forResource: name, withExtension: "json") else {
+            throw LayoutError.fileNotFound("\(name).json")
+        }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         self.layout = try decoder.decode(MarkupLayout.self, from: data)
@@ -37,9 +40,11 @@ public class Layout {
             views: views)
     }
     
-    private func add(views: [String: MarkupElement], to root: UIView) {
+    private func add(views: [String: MarkupElement], to root: UIView) throws {
         for (id, view) in views {
-            guard let v = self.viewOfType(view.type, id) else { continue }
+            guard let v = self.viewOfType(view.type, id) else {
+                throw LayoutError.classNotFound(view.type)
+            }
             self.didCreateView(v, id)
             v.translatesAutoresizingMaskIntoConstraints = false
             v.tag = id.hash
@@ -47,14 +52,14 @@ public class Layout {
             root.addSubview(v)
             if let children = view.children {
                 // recursion
-                self.add(views: children, to: v)
+                try self.add(views: children, to: v)
             }
         }
     }
     
-    public func inflate(in root: UIView) {
+    public func inflate(in root: UIView) throws {
         root.translatesAutoresizingMaskIntoConstraints = false
-        self.add(views: layout.views, to: root)
+        try self.add(views: layout.views, to: root)
         self.metrics = layout.metrics
         for (id, constraint) in layout.constraints {
             self.addConstraint(id: id, visualFormat: constraint)

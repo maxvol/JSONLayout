@@ -63,7 +63,7 @@ For further customization of views and constraints, implement some or all lambda
 try? Layout(name: "layout").configure {
     // customize format options
     $0.formatOptions = { (id) -> NSLayoutConstraint.FormatOptions in [] }
-    // provide view yourself (if the class does not have default initializer) or fall back to the default implementation
+    // provide view yourself or fall back to the default implementation
     $0.viewOfType = { (type, id) -> UIView? in return Layout.view(of: type) }
     // configure a newly created view
     $0.didCreateView = { (view, id) -> Void in return }
