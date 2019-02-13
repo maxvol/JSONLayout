@@ -1,5 +1,7 @@
 # JSONLayout
-iOS Auto Layout with JSON and VFL
+iOS Auto Layout with JSON and VFL.
+
+*Good for quick prototyping layouts with VFL and for reusable UI components.*
 
 How to define layout in JSON:
 ```json
@@ -37,7 +39,7 @@ How to define layout in JSON:
     }
 }
 ```
-**Gotcha**: if the view class in not a part of `UIKit`, specify its full name including module, i.e. `MyApp.MyView`.
+*GOTCHA*: if the view class in not a part of `UIKit`, specify its full name including module, i.e. `MyApp.MyView`.
 
 How to use it in code:
 ```swift
@@ -75,5 +77,5 @@ try? Layout(name: "layout").configure {
 
 Carthage setup:
 ```
-github "maxvol/JSONLayout" ~> 0.1.0
+github "maxvol/JSONLayout" ~> 0.1.1
 ```
