@@ -1,5 +1,5 @@
 # JSONLayout
-iOS Auto Layout with JSON and VFL.
+iOS Auto Layout with JSON and Visual Format Language (VFL).
 
 *Good for quick prototyping layouts with VFL and for reusable UI components.*
 
