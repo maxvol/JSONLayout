@@ -18,7 +18,7 @@ let package = Package(
         .target(
             name: "JSONLayout",
             dependencies: [],
-            path: "Sources"),
+            path: "."),
 //        .testTarget(
 //            name: "JSONLayoutTests",
 //            dependencies: ["JSONLayout"],
